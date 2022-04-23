@@ -1,0 +1,546 @@
+@import "../bourbon/bourbon";
+
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,300,500);
+
+$color-black: #000;
+$color-gray: #5e6062;
+$color-white: rgb(237, 245, 246);
+$color-blue: #97cae8;
+$color-blue-light: #bae6f7;
+
+$transition-time: 250ms;
+$transition-method: ease-in-out;
+
+$album-size: 310px;
+$vinyl-offset: 20px;
+$vinyl-size: $album-size - $vinyl-offset;
+$vinyl-center-size: 146px;
+
+html {
+  background-color: $color-blue;
+  box-sizing: border-box;
+  // background-image: url("../imgs/cover.jpg");
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../imgs/cover.jpg');
+  background-attachment: fixed;
+}
+// html
+
+h1 span{
+  font-size: 80px;
+}
+
+a {
+  color: $color-blue;
+}
+
+.container {
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+  color: $color-white;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  line-height: inherit;
+}
+// *, *:before, *:after
+
+.player {
+  transition: all $transition-time $transition-method;
+  color: $color-gray;
+  font-family: "Raleway", sans-serif;
+  height: $album-size;
+  line-height: 1.2;
+  margin: 50px auto;
+  position: relative;
+  width: $album-size;
+
+  &:after {
+    transform: rotate(-2deg);
+    transition: all $transition-time $transition-method;
+    background: #777;
+    bottom: 12px;
+    box-shadow: 0 15px 23px rgba($color-black, 0.3);
+    content: "";
+    height: 10px;
+    left: 2%;
+    opacity: 0;
+    padding-left: 5%;
+    position: absolute;
+    width: 96%;
+    z-index: 5;
+  }
+  // &:after
+
+  .player__content {
+    background-color: $color-white;
+    height: 100%;
+    padding: 100px 0 0 20px;
+    position: relative;
+    text-align: right;
+    width: 100%;
+    z-index: 10;
+  }
+  // .player__content
+
+  .player__artist {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    width: 200px;
+  }
+  // .player__artist
+
+  .player__album {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    width: 200px;
+  }
+  // .player__album
+
+  .player__track {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    width: 200px;
+
+    &:before,
+    &:after {
+      content: '"';
+      font-size: 22px;
+      vertical-align: middle;
+    }
+    // &:before, &:after
+  }
+  // .player__track
+}
+// .player
+
+.player--open {
+  border-radius: 2px;
+  height: 370px;
+  position: relative;
+  width: 460px;
+
+  &:after {
+    opacity: 1;
+  }
+  // &:after
+}
+// .player--open
+
+.player__controls {
+  $size: 26px;
+  $speed: 0.3s;
+  bottom: 45px;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  white-space: nowrap;
+  width: 250px;
+
+  &-item {
+    user-select: none;
+    cursor: pointer;
+    display: inline-block;
+    height: $size;
+    margin: 0 $size/3;
+    position: relative;
+    width: $size;
+
+    &--play {
+      overflow: hidden;
+
+      .rectangle,
+      .triangle {
+        height: $size;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: $size;
+      }
+      // .rectangle, .triangle
+
+      .rectangle {
+        z-index: 5;
+
+        &:before,
+        &:after {
+          transition: all $speed ease;
+          background-color: $color-blue;
+          content: "";
+          height: 100%;
+          width: 50%;
+
+          .player--playing & {
+            width: 36%;
+          }
+          // .player--playing &
+        }
+        // &:before, &:after
+
+        &:before {
+          float: left;
+          overflow: hidden;
+        }
+        // &:before
+
+        &:after {
+          float: right;
+        }
+        // &:before
+      }
+      // .rectangle
+
+      .triangle {
+        z-index: 10;
+
+        &:before,
+        &:after {
+          transition: all $speed ease;
+          background-color: transparent;
+          border-bottom: $size/2 solid transparent;
+          border-right: $size solid $color-white;
+          border-top: $size/2 solid transparent;
+          content: "";
+          height: 0;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 0;
+        }
+        // &:before, &:after
+
+        &:before {
+          transform: translate(0, -50%);
+
+          .player--playing & {
+            transform: translate(0, -100%);
+          }
+          // .player--playing &
+        }
+        // &:before
+
+        &:after {
+          transform: translate(0, 50%);
+
+          .player--playing & {
+            transform: translate(0, 100%);
+          }
+          // .player--playing &
+        }
+        // &:after
+      }
+      // .triangle
+
+      &:hover {
+        .rectangle {
+          &:before,
+          &:after {
+            background-color: darken($color-blue, 10%);
+          }
+          // &:before, &:after
+        }
+        // .rectangle
+      }
+      // &:hover
+    }
+    // &--play
+
+    &--next,
+    &--prev {
+      width: 45px;
+
+      &:before,
+      &:after {
+        transition: all $speed ease;
+        border-bottom: $size/2 solid transparent;
+        border-top: $size/2 solid transparent;
+        content: "";
+        height: 0;
+        position: absolute;
+        top: 0;
+        width: 0;
+      }
+      // &:before, &:after
+    }
+    // &--next, &--prev
+
+    &--next {
+      width: 45px;
+
+      &:before,
+      &:after {
+        border-left: $size solid $color-blue;
+      }
+      // &:before, &:after
+
+      &:before {
+        left: 0;
+      }
+      // &:before
+
+      &:after {
+        left: $size/1.5;
+      }
+      // &:before
+
+      &:hover {
+        &:before,
+        &:after {
+          border-left-color: darken($color-blue, 10%);
+        }
+        // &:before, &:after
+      }
+      // &:hover
+    }
+    // &--next
+
+    &--prev {
+      &:before,
+      &:after {
+        border-right: $size solid $color-blue;
+      }
+      // &:before, &:after
+
+      &:before {
+        right: 0;
+      }
+      // &:before
+
+      &:after {
+        right: $size/1.5;
+      }
+      // &:before
+
+      &:hover {
+        &:before,
+        &:after {
+          border-right-color: darken($color-blue, 10%);
+        }
+        // &:before, &:after
+      }
+      // &:hover
+    }
+    // &--prev
+  }
+  // &-item
+}
+// .player__controls
+
+.album {
+  transform: translateY(-50%);
+  transition: all $transition-time $transition-method;
+  box-shadow: 0px 0px 10px 0px rgba($color-black, 0.4);
+  cursor: pointer;
+  height: $album-size;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: $album-size;
+  z-index: 100;
+
+  .player--open & {
+    cursor: default;
+    right: -100px;
+  }
+  // .player--open &
+
+  &__cover {
+    background-color: $color-black;
+    background-size: cover;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    z-index: 20;
+  }
+  // &__cover
+
+  &:hover {
+    .vinyl {
+      left: 25%;
+    }
+    // .vinyl
+  }
+  // &:hover
+}
+// .album
+
+.album--fuck-that-flower {
+  .album__cover,
+  .vinyl .vinyl__center:before {
+    background-image: url("../imgs/1.jpg");
+  }
+  // .album__cover, .vinyl .vinyl__center:before
+}
+// .album--fuck-that-flower
+
+.album--hey-thama {
+  .album__cover,
+  .vinyl .vinyl__center:before {
+    background-image: url("../imgs/2.jpg");
+  }
+  // .album__cover, .vinyl .vinyl__center:before
+}
+// .album--hey-thama
+
+.album--safe-land {
+  .album__cover,
+  .vinyl .vinyl__center:before {
+    background-image: url("../imgs/3.jpg");
+  }
+  // .album__cover, .vinyl .vinyl__center:before
+}
+// .album--safe-land
+
+.album--redemption-drake {
+  .album__cover,
+  .vinyl .vinyl__center:before {
+    background-image: url("../imgs/4.jpg");
+  }
+  // .album__cover, .vinyl .vinyl__center:before
+}
+// .redemption-drake
+
+.album--shu-shu-shu {
+  .album__cover,
+  .vinyl .vinyl__center:before {
+    background-image: url("../imgs/5.jpg");
+  }
+  // .album__cover, .vinyl .vinyl__center:before
+}
+// .album--shu-shu-shu
+
+
+
+.vinyl {
+  transition: all $transition-time $transition-method;
+  left: $vinyl-offset/2;
+  position: absolute;
+  top: $vinyl-offset/2;
+  height: $vinyl-size;
+  width: $vinyl-size;
+
+  .player--open & {
+    left: 0 !important;
+  }
+  // .player--open &
+
+  .player--playing & {
+    left: 50% !important;
+  }
+  // .player--playing &
+
+  &__shadow,
+  &__circle {
+    border-radius: 100%;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  // &__shadow, &__circle
+
+  &__shadow {
+    box-shadow: 2px 8px 10px 0 rgba($color-black, 0.15);
+    z-index: 5;
+  }
+  // &__shadow
+
+  &__circle {
+    animation: rotate 1s linear infinite both paused;
+    background-color: #262121;
+    z-index: 10;
+
+    .player--playing & {
+      animation-play-state: running;
+    }
+    // .player--playing &
+  }
+  // &__circle
+
+  &__center {
+    transform: translate(-50%, -50%);
+    background-color: #292424;
+    border-radius: 100%;
+    height: $vinyl-center-size;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    width: $vinyl-center-size;
+
+    &:before,
+    &:after {
+      transform: translate(-50%, -50%);
+      border-radius: 100%;
+      content: "";
+      left: 50%;
+      position: absolute;
+      top: 50%;
+    }
+
+    &:before {
+      background-color: #ed7167;
+      background-size: cover;
+      height: 116px;
+      width: 116px;
+      z-index: 5;
+    }
+    // &:before
+
+    &:after {
+      background-color: $color-white;
+      height: 40px;
+      width: 40px;
+      z-index: 10;
+    }
+    // &:after
+  }
+  // &__center
+}
+// .vinyl
+
+////
+// Helpers
+////
+
+.has-fade-in {
+  transition: all $transition-time * 2 $transition-method;
+  opacity: 0;
+
+  .player--open & {
+    opacity: 1;
+  }
+  // .player--open &
+}
+// .has-fade-in
+
+////
+// Keyframes
+////
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+// @include keyframes(rotate)
+
+
+[data-scroll] {
+  transition: opacity 1s;
+}
+[data-scroll="in"] {
+  opacity: 1;
+}
+[data-scroll="out"] {
+  opacity: 0;
+}
